@@ -42,4 +42,4 @@ jobs:
       - name: Run tests
         run: python -m unittest discover -s tests -v
 
-✅ ده هينفذ job مرتين: مرة بـ Python 3.12 ومرة بـ Python 3.11 (أو أي نسخ تحددها).
+
