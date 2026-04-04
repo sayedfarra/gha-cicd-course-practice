@@ -17,19 +17,18 @@ on:
 
 jobs:
   run-tests:
-    # The runner is the temporary machine that executes the steps below.
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.11"]  # حط النسخ اللي عايزها
     steps:
       - name: Check out repository
-        # Download the repository contents onto the runner.
         uses: actions/checkout@v6
 
       - name: Set up Python
-        # Prepare Python on the runner. This does not change the student laptop.
         uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
           
       - name: Show Python version
         run: python --version
@@ -39,6 +38,8 @@ jobs:
         
       - name: Show runner time
         run: date
+
       - name: Run tests
-        # This is the key verification step in the CI workflow.
         run: python -m unittest discover -s tests -v
+
+✅ ده هينفذ job مرتين: مرة بـ Python 3.12 ومرة بـ Python 3.11 (أو أي نسخ تحددها).
