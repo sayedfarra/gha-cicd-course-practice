@@ -1,29 +1,23 @@
-# This is the first real CI workflow in the course.
-# It verifies a change by running tests on a fresh runner.
 name: 02 CI Workflow
 
 on:
-
   schedule:
     - cron: '25 10 * * *' 
-  # Run automatically when app code, tests, or this workflow file changes.
   push:
     paths:
       - "app/**"
       - "tests/**"
       - ".github/workflows/02-ci.yml"
-  # Allow a safe manual run before students trigger it with a code change.
   workflow_dispatch:
 
 jobs:
   run-tests:
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        python-version: [$PYTHON_VER1, $PYTHON_VER2]  # هيتغير بالقيم من secrets
+      matrix: ${{ fromJSON(env.PYTHON_MATRIX) }}
     env:
-      PYTHON_VER1: ${{ secrets.SECRET1 }}
-      PYTHON_VER2: ${{ secrets.SECRET2 }}
+      # قيم الـ secrets بصيغة JSON array
+      PYTHON_MATRIX: ${{ toJSON([ secrets.SECRET1, secrets.SECRET2 ]) }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -31,7 +25,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix }}
           
       - name: Show Python version
         run: python --version
