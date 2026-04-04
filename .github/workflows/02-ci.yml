@@ -20,7 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.12", "3.11"]  # حط النسخ اللي عايزها
+        python-version: [$PYTHON_VER1, $PYTHON_VER2]  # هيتغير بالقيم من secrets
+    env:
+      PYTHON_VER1: ${{ secrets.SECRET1 }}
+      PYTHON_VER2: ${{ secrets.SECRET2 }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -41,5 +44,3 @@ jobs:
 
       - name: Run tests
         run: python -m unittest discover -s tests -v
-
-
